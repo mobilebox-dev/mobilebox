@@ -62,7 +62,7 @@ Every failure raises `MobileboxError` with `code`, `message`, `next` (what to do
 | `timeout` | 65 s per request (server waits cap at 55 s) |
 | `user_agent` | `mobilebox-python/<version>`; yours goes in front of it |
 
-For agent frameworks: [`langchain-mobilebox`](https://github.com/fifteenA/mobilebox/tree/main/packages/python/langchain-mobilebox) wraps this client as LangChain tools. Any MCP client can use `https://mobilebox.dev/mcp` directly ([setup](https://github.com/fifteenA/mobilebox#quickstart)).
+For agent frameworks: [`langchain-mobilebox`](https://github.com/mobilebox-dev/mobilebox/tree/main/packages/python/langchain-mobilebox) wraps this client as LangChain tools. Any MCP client can use `https://mobilebox.dev/mcp` directly ([setup](https://github.com/mobilebox-dev/mobilebox#quickstart)).
 
 ## Development
 

@@ -20,7 +20,7 @@ Every example, run unchanged against production (`https://mobilebox.dev`) with o
 Times include boot (the phone is free until ready) and are measured on the calling machine, network included. Not run here: Claude Code itself on the prompt in [claude-code/README.md](claude-code/README.md); the replay sends the same tool calls. The CI `smoke` job runs all of the above on every push to `main` once the `MOBILESANDBOX_API_KEY` secret is set.
 
 
-**2026-11-05**, in CI's production smoke ([run 42114977012](https://github.com/fifteenA/mobilebox/actions/runs/42114977012)), ubuntu-latest, curl + jq.
+**2026-11-05**, in CI's production smoke ([run 42114977012](https://github.com/mobilebox-dev/mobilebox/actions/runs/42114977012)), ubuntu-latest, curl + jq.
 
 | Example | Command | Result | Time |
 |---|---|---|---|
