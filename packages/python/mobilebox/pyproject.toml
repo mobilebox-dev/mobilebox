@@ -25,8 +25,8 @@ classifiers = [
 [project.urls]
 Homepage = "https://mobilebox.dev"
 Documentation = "https://mobilebox.dev/docs/reference"
-Source = "https://github.com/fifteenA/mobilebox/tree/main/packages/python/mobilebox"
-Issues = "https://github.com/fifteenA/mobilebox/issues"
+Source = "https://github.com/mobilebox-dev/mobilebox/tree/main/packages/python/mobilebox"
+Issues = "https://github.com/mobilebox-dev/mobilebox/issues"
 
 [dependency-groups]
 test = ["pytest>=8"]

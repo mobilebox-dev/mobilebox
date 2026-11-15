@@ -24,9 +24,9 @@ classifiers = [
 
 [project.urls]
 Homepage = "https://mobilebox.dev/integrations"
-Documentation = "https://github.com/fifteenA/mobilebox/tree/main/packages/python/langchain-mobilebox#readme"
-Source = "https://github.com/fifteenA/mobilebox/tree/main/packages/python/langchain-mobilebox"
-Issues = "https://github.com/fifteenA/mobilebox/issues"
+Documentation = "https://github.com/mobilebox-dev/mobilebox/tree/main/packages/python/langchain-mobilebox#readme"
+Source = "https://github.com/mobilebox-dev/mobilebox/tree/main/packages/python/langchain-mobilebox"
+Issues = "https://github.com/mobilebox-dev/mobilebox/issues"
 
 [dependency-groups]
 test = ["pytest>=8", "pytest-asyncio>=0.23", "langchain-tests==1.1.9"]

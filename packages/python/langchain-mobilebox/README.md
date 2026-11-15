@@ -53,7 +53,7 @@ finally:
     mb.delete_phone(phone.id)
 ```
 
-A cloud phone costs $0.01 per minute while ready, billed per second; parked phones are free. New accounts start with $2 of credit. Prefer MCP? Any LangChain agent can load the same tools from `https://mobilebox.dev/mcp` with `langchain-mcp-adapters` ([example](https://github.com/fifteenA/mobilebox/blob/main/examples/integrations/langgraph/agent.py)).
+A cloud phone costs $0.01 per minute while ready, billed per second; parked phones are free. New accounts start with $2 of credit. Prefer MCP? Any LangChain agent can load the same tools from `https://mobilebox.dev/mcp` with `langchain-mcp-adapters` ([example](https://github.com/mobilebox-dev/mobilebox/blob/main/examples/integrations/langgraph/agent.py)).
 
 ## Development
 

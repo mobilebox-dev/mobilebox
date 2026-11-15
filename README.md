@@ -22,12 +22,12 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/fifteenA/mobilebox/actions/workflows/ci.yml"><img src="https://github.com/fifteenA/mobilebox/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
+  <a href="https://github.com/mobilebox-dev/mobilebox/actions/workflows/ci.yml"><img src="https://github.com/mobilebox-dev/mobilebox/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
   <a href="https://glama.ai/mcp/connectors/dev.mobilebox/mobilebox"><img src="https://glama.ai/mcp/connectors/dev.mobilebox/mobilebox/badges/score.svg" alt="Rated A on Glama"></a>
   <a href="https://registry.modelcontextprotocol.io/v0/servers?search=dev.mobilebox/mobilebox"><img src="https://img.shields.io/badge/MCP_registry-official-2a46d1" alt="Official MCP registry: dev.mobilebox/mobilebox"></a>
   <a href="https://www.npmjs.com/package/mobilebox"><img src="https://img.shields.io/npm/v/mobilebox?color=2a46d1&label=npm" alt="npm: mobilebox"></a>
   <a href="https://mcpservers.org/servers/fifteena/mobilebox"><img src="https://mcpservers.org/badge.svg" alt="Listed on mcpservers.org" height="20"></a>
-  <a href="https://github.com/fifteenA/android-smoke-action"><img src="https://img.shields.io/github/v/release/fifteenA/android-smoke-action?label=GitHub%20Action&color=2a46d1&logo=githubactions&logoColor=white" alt="GitHub Action: android-smoke-action"></a>
+  <a href="https://github.com/mobilebox-dev/android-smoke-action"><img src="https://img.shields.io/github/v/release/mobilebox-dev/android-smoke-action?label=GitHub%20Action&color=2a46d1&logo=githubactions&logoColor=white" alt="GitHub Action: android-smoke-action"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-2a46d1" alt="MIT license"></a>
 </p>
 
