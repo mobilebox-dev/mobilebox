@@ -57,7 +57,7 @@ const { tools } = await rpc('tools/list')
 if (!tools?.length) throw new Error('tools/list returned no tools')
 console.log(`tools/list ok: ${tools.map(t => t.name).join(', ')}`)
 
-const firstSentence = text => text.split(/(?<=\.)\s/)[0].replace(/\|/g, '\\|')
+const firstSentence = text => text.split(/(?<!\b(?:e\.g|i\.e)\.)(?<=\.)\s/)[0].replace(/\|/g, '\\|')
 const args = schema => Object.keys(schema.properties ?? {})
   .map(name => (schema.required ?? []).includes(name) ? `\`${name}\`` : `\`${name}?\``).join(', ')
 const table = [
