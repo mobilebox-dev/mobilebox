@@ -145,6 +145,8 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | `install_app` | Install or update an app from a public download URL: an APK (arm64-v8a or universal) or a split bundle (.apks/.xapk; the splits this phone needs are picked), up to 2 GB. | `phone_id`, `url`, `grant_permissions?` |
 | `list_apps` | List the apps the user installed on this phone, not the system apps. | `phone_id` |
 | `uninstall_app` | Uninstall an app and delete its data. | `phone_id`, `package` |
+| `push_file` | Put a file on the phone, e.g. | `phone_id`, `path`, `url?`, `content?`, `encoding?` |
+| `pull_file` | Read a file from the phone's shared storage (/sdcard), e.g. | `phone_id`, `path?` |
 | `observe` | Read the current screen as a numbered element list. | `phone_id` |
 | `act` | Run 1–20 actions on the phone in order (tap, type, swipe, scroll, keys, open or close apps, waits) and stop at the first failure. | `phone_id`, `actions` |
 | `screenshot` | Take a screenshot of the phone. | `phone_id` |
