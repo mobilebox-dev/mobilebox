@@ -145,6 +145,7 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | `install_app` | Install or update an app from a public download URL: an APK (arm64-v8a or universal) or a split bundle (.apks/.xapk; the splits this phone needs are picked), up to 2 GB. | `phone_id`, `url`, `grant_permissions?` |
 | `list_apps` | List the apps the user installed on this phone, not the system apps. | `phone_id` |
 | `uninstall_app` | Uninstall an app and delete its data. | `phone_id`, `package` |
+| `app_logs` | Read an installed app's own log lines (Android logcat, only that app's processes, crash reports included) and how its processes last ended (crash, crash_native, anr, low_memory, user_requested for a force stop, …). | `phone_id`, `package`, `since?`, `lines?`, `level?` |
 | `push_file` | Put a file on the phone, e.g. a game file, mod, save or document an app imports through Android's file picker: from a public download URL (up to 2 GB) or inline content. | `phone_id`, `path`, `url?`, `content?`, `encoding?` |
 | `pull_file` | Read a file from the phone's shared storage (/sdcard), e.g. a log, export or save an app wrote: text comes back as text and anything else as base64, up to 100 KB; PNG and JPEG as an image, up to 1 MB (larger files: GET /v1/phones/{id}/files over REST). | `phone_id`, `path?` |
 | `observe` | Read the current screen as a numbered element list. | `phone_id` |
