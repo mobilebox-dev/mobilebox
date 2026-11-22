@@ -142,7 +142,7 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | `park_phone` | Park a phone: shuts it down and stops billing. | `phone_id` |
 | `delete_phone` | Delete a phone and everything on it: apps, data and logins. | `phone_id` |
 | `set_device` | Set where the phone is: country and city together, or timezone, locale and GPS one by one, plus the network its IP comes from or a proxy; its battery; the picture its camera app returns; and Google services via microG (open source). | `phone_id`, `timezone?`, `locale?`, `location?`, `proxy?`, `country?`, `city?`, `network?`, `battery?`, `camera_image?`, `google?` |
-| `install_app` | Install or update an app from a public download URL: an APK (arm64-v8a or universal) or a split bundle (.apks/.xapk; the splits this phone needs are picked), up to 2 GB. | `phone_id`, `url`, `grant_permissions?` |
+| `install_app` | Install or update an app from a public download URL: an APK (arm64-v8a or universal) or a split bundle (.apks/.xapk; the splits this phone needs are picked), up to 2 GB; on an iPhone or iPad, a .zip of the simulator build's .app folder, which opens once installed. | `phone_id`, `url`, `grant_permissions?` |
 | `list_apps` | List the apps the user installed on this phone, not the system apps. | `phone_id` |
 | `uninstall_app` | Uninstall an app and delete its data. | `phone_id`, `package` |
 | `app_logs` | Read an installed app's own log lines (Android logcat, only that app's processes, crash reports included), how its processes last ended (crash, crash_native, anr, low_memory, user_requested for a force stop, …) and its newest ANR trace (the main thread's stack). | `phone_id`, `package`, `since?`, `lines?`, `level?` |
