@@ -5,11 +5,12 @@
   </picture>
 </a>
 
-<p align="center"><b>Mobilebox: Cloud phones for your agents</b><br>Phones for your agents: each agent gets its own cloud Android phone over MCP, reads the screen, taps, types and installs your APK. Ready in ~20 s, $0.01/min, parked phones free.</p>
+<p align="center"><b>Mobilebox: Cloud phones for your agents</b><br>Phones for your agents: each agent gets its own cloud Android phone over MCP, reads the screen, taps, types and installs your APK. Ready in ~1.4 s, $0.01/min, parked phones free.</p>
 
 **Mobilebox gives your AI agent a phone it can use.** Claude Code, Codex, Cursor or your own agent loop creates a cloud Android 14 phone, reads the screen as numbered elements, taps, types, installs your APK, then parks or deletes the phone. One phone per task or pull request costs a few cents: $0.01 per phone-minute, billed per second.
 
-- **Measured, 2026-11-08** ([method, scripts and CSV](benchmarks)): a Mobilebox phone was ready for its first screenshot in 19.4 s (median of 10) and a 10-minute session cost $0.10. On a GitHub Actions runner, the same start took 20.3 s, against 50 s for the Android emulator with KVM and 813 s without it (one run).
+- **Measured, 2026-11-22** ([method, scripts and CSV](benchmarks)): a Mobilebox Android phone, handed over pre-booted, was ready for its first screenshot in 1.35 s (median of 10; p90 1.51 s), down from 20.0 s that morning; a large phone boots fresh in about 20 s. The scripted task cost $0.01.
+- **Measured, 2026-11-08**: a Mobilebox phone was ready for its first screenshot in 19.4 s (median of 10) and a 10-minute session cost $0.10. On a GitHub Actions runner, the same start took 20.3 s, against 50 s for the Android emulator with KVM and 813 s without it (one run).
 - **Fair comparison:** in the same benchmark Limrun started in 0.98 s ($0.04 a minute on its $20 plan), and Clousd lists a lower price ($0.004 a minute, as published on 2026-11-10). [All cloud phones for AI agents, compared](https://mobilebox.dev/blog/best-cloud-phones-for-ai-agents?via=readme).
 
 <p align="center">
