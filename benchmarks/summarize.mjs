@@ -1,10 +1,10 @@
-// results/*.csv (raw samples) → results/summary.csv: n, failures, median and p90 per provider, client and metric.
-//   node benchmarks/summarize.mjs
+// <dir>/*.csv (raw samples) → <dir>/summary.csv: n, failures, median and p90 per provider, client and metric.
+//   node benchmarks/summarize.mjs [results/2026-11-22]   (default: results/, the 2026-11-08 run)
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { HERE, pct } from './lib.mjs'
 
-const dir = join(HERE, 'results')
+const dir = process.argv[2] ?? join(HERE, 'results')
 const parse = (line) => [...line.matchAll(/("(?:[^"]|"")*"|[^,]*)(,|$)/g)].slice(0, -1).map((m) => m[1].replace(/^"|"$/g, '').replaceAll('""', '"'))
 const groups = new Map()
 for (const f of readdirSync(dir).filter((f) => f.endsWith('.csv') && f !== 'summary.csv' && !f.startsWith('excluded-'))) {
