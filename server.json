@@ -5,6 +5,22 @@
   "title": "Mobilebox: Cloud phones for your agents",
   "version": "1.0.13",
   "websiteUrl": "https://mobilebox.dev",
+  "icons": [
+    {
+      "src": "https://mobilebox.dev/brand/avatar-400.png",
+      "mimeType": "image/png",
+      "sizes": [
+        "400x400"
+      ]
+    },
+    {
+      "src": "https://mobilebox.dev/brand/mark.svg",
+      "mimeType": "image/svg+xml",
+      "sizes": [
+        "any"
+      ]
+    }
+  ],
   "repository": {
     "url": "https://github.com/mobilebox-dev/mobilebox",
     "source": "github"
