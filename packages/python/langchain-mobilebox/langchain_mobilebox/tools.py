@@ -46,7 +46,7 @@ class MobileboxCreatePhone(_MobileboxTool):
 
     name: str = "mobilebox_create_phone"
     description: str = (
-        "Create a cloud Android phone, wait until it is ready (about 20 s) and return its id and first screen. "
+        "Create a cloud Android phone, wait until it is ready (about 1.4 s; a large phone about 20 s) and return its id and first screen. "
         "Costs $0.01 per minute while ready: delete it when the task is done, also when it failed."
     )
     args_schema: type[BaseModel] = CreatePhoneInput
