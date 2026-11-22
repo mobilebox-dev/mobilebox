@@ -36,6 +36,7 @@ The [benchmarks workflow](../.github/workflows/benchmarks.yml) runs the emulator
 
 | Run | Folder | What |
 |---|---|---|
+| 2026-11-22T1813 | `results/2026-11-22T1813/` | Android normal and large again, after the warm pool ([#321](https://github.com/Musti7even/phonebox/issues/321)): a plain create gets a pre-booted phone, a large one still boots fresh. 10 sessions each; one large session lost its later steps when the API restarted for another deploy (18:20 UTC), so an 11th was run. The site's CSV for this run adds the iOS rows of the run before |
 | 2026-11-22 | `results/2026-11-22/` | Mobilebox Android normal, Android large, iOS simulator; 10 sessions each, client in Nuremberg, Germany. One Android normal and one Android large session got a 502 while the API restarted for a deploy (16:28 and 16:42 UTC); both are in the CSVs as `error`, and an 11th session was run for each; `summary.csv` = [mobilebox.dev/benchmark-mobilebox-2026-11-22.csv](https://mobilebox.dev/benchmark-mobilebox-2026-11-22.csv) |
 | 2026-11-08 | `results/` (files below) | Mobilebox, Limrun, Phone Harness, emulator on GitHub Actions |
 
