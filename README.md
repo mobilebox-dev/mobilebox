@@ -142,7 +142,7 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | `start_phone` | Resume a parked phone and wait until it is ready; its apps, data and logins are kept. | `phone_id` |
 | `park_phone` | Park a phone: shuts it down and stops billing. | `phone_id` |
 | `delete_phone` | Delete a phone and everything on it: apps, data and logins. | `phone_id` |
-| `set_device` | Set where the phone is: country and city together, or timezone, locale and GPS one by one, plus the network its IP comes from or a proxy; its battery; the picture its camera app returns; and Google services via microG (open source). | `phone_id`, `timezone?`, `locale?`, `location?`, `proxy?`, `country?`, `city?`, `network?`, `battery?`, `camera_image?`, `google?`, `network_conditions?` |
+| `set_device` | Set where the phone is: country and city together, or timezone, locale and GPS one by one, plus the network its IP comes from or a proxy; its battery; the picture its camera app returns; Google services via microG (open source); and whether it is a phone or a tablet. | `phone_id`, `timezone?`, `locale?`, `location?`, `proxy?`, `country?`, `city?`, `network?`, `battery?`, `camera_image?`, `google?`, `model?`, `network_conditions?` |
 | `install_app` | Install or update an app from a public download URL: an APK (arm64-v8a or universal) or a split bundle (.apks/.xapk; the splits this phone needs are picked), up to 2 GB; on an iPhone or iPad, a .zip of the simulator build's .app folder, which opens once installed. | `phone_id`, `url`, `grant_permissions?` |
 | `list_apps` | List the apps the user installed on this phone, not the system apps. | `phone_id` |
 | `uninstall_app` | Uninstall an app and delete its data. | `phone_id`, `package` |
