@@ -1,0 +1,21 @@
+provider,region,client,metric,n,failed,median_ms,p90_ms,dates
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",act,100,0,556,675,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",app_install,10,0,861,1395,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",cold_start_to_screenshot,10,0,27666,44130,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",observe,100,0,21,75,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",park,10,0,1758,1887,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",ready,10,0,24652,38049,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",resume_to_screenshot,10,0,21648,25751,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",screenshot,100,0,991,1600,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",tap_to_screenshot,100,0,1568,2305,2026-11-23
+"Mobilebox, Android 12",EU (Germany),"Data center in Nuremberg, Germany",task_cost_microusd,10,0,10000,10000,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",act,100,0,529,642,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",app_install,10,0,1272,1435,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",cold_start_to_screenshot,10,0,19705,26134,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",observe,100,0,16,47,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",park,10,0,1370,2399,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",ready,10,0,17495,22989,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",resume_to_screenshot,10,0,14893,25665,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",screenshot,100,0,1160,1770,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",tap_to_screenshot,100,0,1683,2397,2026-11-23
+"Mobilebox, Android 13",EU (Germany),"Data center in Nuremberg, Germany",task_cost_microusd,10,0,10000,10000,2026-11-23

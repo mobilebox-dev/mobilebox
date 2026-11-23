@@ -1,15 +1,16 @@
 // Mobilebox: cold start → first screenshot, observe, act, screenshot, app install, cost of the task, park → resume. Deletes every phone.
 //   MOBILESANDBOX_API_KEY=... CLIENT="my laptop, Berlin" node benchmarks/mobilebox.mjs
 //   SIZE=large …                      the large Android phone
+//   ANDROID=12 … (or 13)               an older Android than the default 14
 //   PLATFORM=ios IOS_APP=YourApp.zip … an iOS simulator; IOS_APP is a .zip of a simulator .app (uploaded). No park on iOS.
 import { readFileSync } from 'node:fs'
 import { APK_URL, APK_PACKAGE, RUNS, TAPS, now, record, sleep } from './lib.mjs'
 
 const base = process.env.MOBILESANDBOX_URL ?? 'https://mobilebox.dev'
 const key = process.env.MOBILESANDBOX_API_KEY ?? (() => { throw new Error('Set MOBILESANDBOX_API_KEY') })()
-const IOS = process.env.PLATFORM === 'ios', SIZE = process.env.SIZE ?? 'normal'
+const IOS = process.env.PLATFORM === 'ios', SIZE = process.env.SIZE ?? 'normal', ANDROID = process.env.ANDROID
 const iosApp = IOS ? readFileSync(process.env.IOS_APP ?? (() => { throw new Error('Set IOS_APP to a .zip of a simulator .app') })()) : null
-const P = IOS ? 'Mobilebox, iOS simulator' : SIZE === 'large' ? 'Mobilebox, Android large' : 'Mobilebox', REGION = IOS ? 'service default' : 'EU (Germany)'
+const P = IOS ? 'Mobilebox, iOS simulator' : SIZE === 'large' ? 'Mobilebox, Android large' : ANDROID ? `Mobilebox, Android ${ANDROID}` : 'Mobilebox', REGION = IOS ? 'service default' : 'EU (Germany)'
 
 async function call(path, method = 'GET', body, type) {
   const bytes = body instanceof Uint8Array
@@ -39,7 +40,7 @@ for (let run = 1; run <= RUNS; run++) {
   try {
     const spent0 = IOS && await spent()
     const t0 = now()
-    id = (await call('/v1/phones', 'POST', { name: `benchmark-${run}`, idle_timeout: 300, max_duration: 900, ...(IOS ? { platform: 'ios' } : { size: SIZE }) })).id
+    id = (await call('/v1/phones', 'POST', { name: `benchmark-${run}`, idle_timeout: 300, max_duration: 900, ...(IOS ? { platform: 'ios' } : { size: SIZE, ...(ANDROID && { android: ANDROID }) }) })).id
     await until(id, 'ready')
     record(P, REGION, 'ready', run, now() - t0)
     const [w, h] = pngSize(await call(`/v1/phones/${id}/screenshot`))
