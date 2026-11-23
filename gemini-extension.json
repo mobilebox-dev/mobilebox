@@ -1,0 +1,8 @@
+{
+  "name": "mobilebox",
+  "version": "1.0.20",
+  "description": "Mobile sandboxes for AI agents: cloud Android phones and iOS simulators over MCP and API.",
+  "mcpServers": {
+    "mobilebox": { "type": "http", "url": "https://mobilebox.dev/mcp" }
+  }
+}

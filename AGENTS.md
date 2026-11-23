@@ -40,7 +40,7 @@ curl --fail-with-body -X POST "https://mobilebox.dev/v1/phones/$ID/apps?grant_pe
 
 Phones are arm64-v8a: x86-only builds fail with `unsupported_abi`. A different signing key on update fails with `signature_mismatch`; don't uninstall to work around it unless the user asked for a fresh install. Fresh apps may open on a permission or onboarding dialog: answer it like a user would, then continue.
 
-**Cost.** A ready cloud Android phone costs $0.01 per minute, iPhone and iPad $0.05, a real Android device $0.03, billed per second. Parked phones are free. Set `idle_timeout` and `max_duration` (seconds) to bound your task. Never leave a phone running when you are done.
+**Cost.** A ready cloud Android phone costs $0.01 per minute, iPhone and iPad $0.03, a real Android device $0.01 (the same as cloud), billed per second. Parked phones are free. Set `idle_timeout` and `max_duration` (seconds) to bound your task. Never leave a phone running when you are done.
 
 **Devices.** Every response says which `platform` and `device` you got. There is no ADB or shell: work through the screen.
 
