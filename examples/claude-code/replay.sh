@@ -27,6 +27,14 @@ trap 'tool delete_phone "{\"phone_id\":\"$ID\"}"' EXIT
 trap 'exit 130' INT TERM   # a cancelled run still deletes the phone
 head -1 <<<"$OUT"
 
+# create_phone returns while a cold boot runs; one ?wait=ready waits up to 55 s, so poll until it is ready.
+STATUS=
+for _ in 1 2 3 4; do
+  STATUS=$(curl -sS --fail-with-body --max-time 70 "$MSB/v1/phones/$ID?wait=ready&timeout=55" -H "$AUTH" | jq -r .status)
+  [ "$STATUS" = ready ] && break
+done
+[ "$STATUS" = ready ] || { echo "FAIL: phone $ID not ready after 4 waits (status: $STATUS)" >&2; exit 1; }
+
 curl -sS --fail-with-body --max-time 600 -X POST "$MSB/v1/phones/$ID/apps?grant_permissions=true" -H "$AUTH" \
   -H 'Content-Type: application/octet-stream' --data-binary "@$APK" | jq -c .
 
