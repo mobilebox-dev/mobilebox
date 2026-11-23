@@ -214,6 +214,8 @@ Each phone is an isolated Android sandbox on Mobilebox servers in Germany, reach
 
 ## For agents
 
+Install it as an agent skill (Claude Code, Codex, Cursor and others): `npx skills add mobilebox-dev/mobilebox` ([skills/mobilebox/SKILL.md](skills/mobilebox/SKILL.md)).
+
 [AGENTS.md](AGENTS.md) is the operating guide: the loop, targets, error recovery and cleanup. Live versions: [skill.md](https://mobilebox.dev/skill.md?via=readme), [llms.txt](https://mobilebox.dev/llms.txt?via=readme).
 
 ---
