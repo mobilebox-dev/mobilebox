@@ -7,7 +7,7 @@
 
 <p align="center"><b>Mobilebox: Cloud phones for your agents</b><br>Phones for your agents: each agent gets its own cloud Android phone over MCP, reads the screen, taps, types and installs your APK. Ready in ~1.4 s, $0.01/min, parked phones free.</p>
 
-**Mobilebox gives your AI agent a phone it can use.** Claude Code, Codex, Cursor or your own agent loop creates a cloud Android 14 phone, reads the screen as numbered elements, taps, types, installs your APK, then parks or deletes the phone. One phone per task or pull request costs a few cents: $0.01 per phone-minute, billed per second.
+**Mobilebox gives your AI agent a phone it can use.** Claude Code, Codex, Cursor or your own agent loop creates a cloud Android 14 phone or an iOS simulator, reads the screen as numbered elements, taps, types, installs your APK or iOS build, then parks or deletes the phone. One phone per task or pull request costs a few cents: $0.01 per phone-minute on Android, $0.03 on iOS, billed per second.
 
 - **Measured, 2026-11-22** ([method, scripts and CSV](benchmarks)): a Mobilebox Android phone, handed over pre-booted, was ready for its first screenshot in 1.35 s (median of 10; p90 1.51 s), down from 20.0 s that morning; a large phone boots fresh in about 20 s. The scripted task cost $0.01.
 - **Measured, 2026-11-08**: a Mobilebox phone was ready for its first screenshot in 19.4 s (median of 10) and a 10-minute session cost $0.10. On a GitHub Actions runner, the same start took 20.3 s, against 50 s for the Android emulator with KVM and 813 s without it (one run).
@@ -103,6 +103,8 @@ bearer_token_env_var = "MOBILESANDBOX_API_KEY"
 { "mcpServers": { "mobilebox": { "type": "http", "url": "https://mobilebox.dev/mcp", "headers": { "Authorization": "Bearer ${MOBILESANDBOX_API_KEY}" } } } }
 ```
 
+**Gemini CLI**: `gemini extensions install https://github.com/mobilebox-dev/mobilebox`, then `/mcp auth mobilebox` in Gemini to sign in ([`gemini-extension.json`](gemini-extension.json)).
+
 **Other clients:** any MCP client with Streamable HTTP and a custom header. Hand-written clients also send `Accept: application/json, text/event-stream`. The registry entry is [`server.json`](server.json).
 </details>
 
@@ -182,8 +184,8 @@ Each creates a phone, checks one outcome and deletes the phone, also when the ch
 | Device | Price |
 |---|---|
 | Cloud Android 14 phone (arm64) | $0.01 per phone-minute |
-| iPhone and iPad (`platform: "ios"`) | $0.05 per phone-minute |
-| Real Android device (`device: "real"`) | $0.03 per phone-minute |
+| iPhone and iPad (`platform: "ios"`) | $0.03 per phone-minute |
+| Real Android device (`device: "real"`) | $0.01 per phone-minute |
 | Dedicated devices | from $79 per month |
 
 Billed per second while a phone is ready, with a one-minute minimum per session. Boot time and parked phones are free. New accounts start with $2 of credit; add more from the dashboard. Over 100 devices: [contact sales](https://calendly.com/mustafa-yenler/30min). [Pricing](https://mobilebox.dev/pricing?via=readme).
