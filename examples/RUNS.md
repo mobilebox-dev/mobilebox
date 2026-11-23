@@ -77,3 +77,19 @@ deleted: ph_on7c4dcbzlnk
 | `mobilebox` | `MOBILEBOX_LIVE=1 pytest -m live` | created, listed, observed, Settings > Display, failed tap with `code` and `next`, PNG, watch link, installed Editor 1.98, parked, started, deleted | 37.8 s |
 | `langchain-mobilebox` | `MOBILEBOX_LIVE=1 pytest tests/integration_tests` | LangChain standard `ToolsIntegrationTests` on `mobilebox_observe`; create, act, failed action reported, screenshot block, install, park, delete through the tools | 27.9 s |
 | both, offline | `pytest` in each package, Python 3.10 and 3.14, from the built wheels | 60 passed (incl. LangChain standard `ToolsUnitTests` for all 7 tools) | 3 s |
+
+**2026-11-23**, OpenHands ([integrations/openhands](integrations/openhands)), from Linux, Python 3.14, openhands-sdk and openhands-tools 1.63.1. The app: a one-activity test app that crashes on start (`Integer.parseInt("v2")`), built with the plain SDK tools (`BUILD=./build.sh APK=build/app.apk`), in a git repo with a local remote. No model credit on this machine, so a scripted stand-in made the model's calls over an OpenAI-compatible endpoint (`LLM_BASE_URL`); OpenHands, its terminal, file editor and MCP client, the build and Mobilebox were real.
+
+| Step | Tool | Result | Time |
+|---|---|---|---|
+| Phone ready, OpenHands up, MCP tools listed | `POST /v1/phones?wait=ready`, `mcp_config` | ready | 3.8 s |
+| Build and install | terminal: `./build.sh && curl --data-binary @build/app.apk …/v1/phones/{id}/apps` | `{"package":"dev.mobilebox.demo",…}` | 2.9 s |
+| Open it | `act` open_app + 2.5 s wait | the launcher: the app crashed | 3.2 s |
+| Read the crash | `app_logs` | `FATAL EXCEPTION: main … NumberFormatException: For input string: "v2"`, `at dev.mobilebox.demo.Main.onCreate(Main.java:13)` | 0.2 s |
+| Fix | file editor: `Integer.parseInt(BUILD.substring(1))` | edited | 0.1 s |
+| Rebuild and reinstall | terminal, as above | installed | 2.5 s |
+| Check the fix | `act` open_app + 2.5 s wait | `[2] Text "Build 2 works"` | 3.6 s |
+| Push | terminal: `git commit -am … && git push origin main` | `main -> main` | 0.2 s |
+
+17 s from the first step to the report, 15 s of phone time; the phone was deleted. The API key was absent from every log and file afterwards (OpenHands masks secrets and the example keeps the shell history off disk).
+

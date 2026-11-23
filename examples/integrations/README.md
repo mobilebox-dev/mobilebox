@@ -11,6 +11,7 @@ One runnable file per agent framework. Each one creates a Mobilebox phone, gives
 | Mastra | [mastra/agent.ts](mastra/agent.ts) | `npm i @mastra/core @mastra/mcp` | MCP, `MCPClient` |
 | Vercel AI SDK | [vercel-ai-sdk/agent.ts](vercel-ai-sdk/agent.ts) | `npm i ai @ai-sdk/mcp @ai-sdk/openai` | MCP, `createMCPClient` |
 | Claude Agent SDK | [claude-agent-sdk/agent.ts](claude-agent-sdk/agent.ts) | `npm i @anthropic-ai/claude-agent-sdk` | MCP, `mcpServers` |
+| OpenHands | [openhands/agent.py](openhands/agent.py) | `pip install openhands-sdk openhands-tools` | MCP, `mcp_config`; uploads its builds over REST |
 
 Run one:
 
@@ -19,6 +20,8 @@ export MOBILESANDBOX_API_KEY=...   # from https://mobilebox.dev/dashboard
 export OPENAI_API_KEY=...          # or ANTHROPIC_API_KEY for the Claude Agent SDK
 python openai-agents/agent.py      # Node 24 runs the .ts files directly: node mastra/agent.ts
 ```
+
+OpenHands runs a different task: from your app's repo it builds the app (`BUILD`, default `./gradlew assembleDebug`; `APK`, its output), runs it on the phone, reads the crash log, fixes the code, checks the fix and pushes. Its model comes from `LLM_MODEL` and `LLM_API_KEY` (LiteLLM ids, `LLM_BASE_URL` for OpenAI-compatible endpoints).
 
 `MODEL` picks another model where the framework takes a model id (LangGraph `provider:model`, CrewAI and Mastra `provider/model`). The OpenAI SDKs also read `OPENAI_BASE_URL`, so any OpenAI-compatible endpoint works.
 
