@@ -2,7 +2,7 @@
   "name": "@mobilebox/agent-device",
   "version": "0.1.0",
   "type": "module",
-  "description": "Mobilebox cloud Android phones as an agent-device provider plugin.",
+  "description": "Mobilebox's agent-device provider plugin, built inside agent-device and shipped as the mobilebox package's ./agent-device export.",
   "keywords": [
     "agent-device",
     "android",
@@ -58,5 +58,6 @@
   },
   "bugs": {
     "url": "https://github.com/mobilebox-dev/mobilebox/issues"
-  }
+  },
+  "private": true
 }

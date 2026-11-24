@@ -6,6 +6,8 @@
 #
 #   scripts/build.sh              the tarball lands in this folder: mobilebox-agent-device-<version>.tgz
 #   WORK=/tmp/x scripts/build.sh  builds in that folder (default: a new temporary one), outside this repository
+#   DIST_OUT=../mobilebox/agent-device scripts/build.sh   also copies the built plugin there: the mobilebox package
+#                                 ships it as its ./agent-device export (.github/workflows/publish.yml)
 set -eu
 here=$(cd "$(dirname "$0")/.." && pwd)
 release=$(tr -d '[:space:]' < "$here/AGENT_DEVICE_VERSION")
@@ -35,6 +37,10 @@ pnpm exec tsc -b packages/provider-mobilebox
 # empty plugin home and connects through it to a stand-in Mobilebox (test/package-smoke.mjs).
 AGENT_DEVICE_SESSION=mobilebox-package-check AGENT_DEVICE_CORE_SPEC="agent-device@$release" \
   node scripts/check-provider-plugin.mjs "$package"
+if [ -n "${DIST_OUT:-}" ]; then
+  case "$DIST_OUT" in /*) out=$DIST_OUT ;; *) out=$here/$DIST_OUT ;; esac
+  rm -rf "$out" && cp -R "$package/dist" "$out" && echo "Copied the plugin to $out"
+fi
 version=$(node -p "require('$package/package.json').version")
 (cd "$package" && pnpm pack --out "$here/mobilebox-agent-device-$version.tgz")
 echo "Packed $here/mobilebox-agent-device-$version.tgz, built against agent-device $release."

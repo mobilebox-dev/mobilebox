@@ -1,13 +1,13 @@
-# @mobilebox/agent-device
+# Mobilebox for agent-device
 
 Mobilebox cloud Android phones as an [agent-device](https://github.com/callstack/agent-device) provider. Your agent runs `agent-device` as usual; each session gets its own Mobilebox phone, created on the first device command and deleted when the session closes. A phone costs $0.01 a minute, billed per second; a new Android 14 phone is ready for its first screenshot in about 1.4 s ([benchmarks](https://mobilebox.dev/benchmarks)).
 
-We build Mobilebox; this plugin is ours, not Callstack's. Report problems in [this repository](https://github.com/mobilebox-dev/mobilebox/issues).
+We build Mobilebox; this plugin is ours, not Callstack's. It ships inside the [`mobilebox`](https://www.npmjs.com/package/mobilebox) npm package as its `mobilebox/agent-device` export; this folder is its source. Report problems in [this repository](https://github.com/mobilebox-dev/mobilebox/issues).
 
 ## Install
 
 ```bash
-agent-device plugins add @mobilebox/agent-device
+agent-device plugins add mobilebox
 ```
 
 ## Connect
@@ -47,7 +47,7 @@ A snapshot is Mobilebox's own reading of the screen (the elements `GET /v1/phone
 ## Options
 
 ```json
-{ "plugins": { "@mobilebox/agent-device": { "options": { "apiKey": "mbx_...", "baseUrl": "https://mobilebox.dev" } } } }
+{ "plugins": { "mobilebox": { "options": { "apiKey": "mbx_...", "baseUrl": "https://mobilebox.dev" } } } }
 ```
 
 Both are optional: `MOBILEBOX_API_KEY` and `MOBILEBOX_API_URL` are read when they are left out.
@@ -60,7 +60,7 @@ agent-device's provider plugins bundle parts of agent-device that are not publis
 scripts/build.sh
 ```
 
-It clones that release, runs the unit test and the type check, builds, runs Callstack's package check against the published agent-device of the same release (an isolated `plugins add` install, then `connect` to a stand-in Mobilebox), and packs the tarball. It needs git, Node 22 or later and npm. The build script and the platform module's shape follow [@nomac/agent-device](https://github.com/NoMac-app/agent-device-plugin) (MIT).
+It clones that release, runs the unit test and the type check, builds, runs Callstack's package check against the published agent-device of the same release (an isolated `plugins add` install, then `connect` to a stand-in Mobilebox), and packs a tarball. With `DIST_OUT=../mobilebox/agent-device` it also copies the plugin into the `mobilebox` package, as [publish.yml](../../.github/workflows/publish.yml) does for a release. It needs git, Node 22 or later and npm. The build script and the platform module's shape follow [@nomac/agent-device](https://github.com/NoMac-app/agent-device-plugin) (MIT).
 
 ## License
 
