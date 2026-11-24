@@ -39,7 +39,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-latest, ubuntu-24.04-arm]
+        runner: [ubuntu-24.04, ubuntu-24.04-arm] # Google's cuttlefish packages target 24.04 (libxml2)
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
