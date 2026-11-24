@@ -16,10 +16,11 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
+      # No registry-url: setup-node would write an .npmrc token placeholder that shadows the OIDC exchange (the
+      # first run got 404 on PUT for that reason; Callstack's release.yml says the same).
       - uses: actions/setup-node@v7
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org
       - run: npm install -g npm@latest # trusted publishing needs npm 11.5.1 or newer
       - name: Tag matches the package version
         working-directory: packages/mobilebox
