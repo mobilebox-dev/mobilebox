@@ -1,0 +1,63 @@
+{
+  "name": "@mobilebox/agent-device",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Mobilebox's agent-device provider plugin, built inside agent-device and shipped as the mobilebox package's ./agent-device export.",
+  "keywords": [
+    "agent-device",
+    "android",
+    "cloud-phone",
+    "mobilebox",
+    "ai-agents",
+    "mcp"
+  ],
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsdown --config tsdown.config.ts",
+    "prepack": "pnpm build"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./agent-device": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "devDependencies": {
+    "@agent-device/contracts": "workspace:*",
+    "@agent-device/kernel": "workspace:*",
+    "@agent-device/plugins": "workspace:*",
+    "@agent-device/provider-webdriver": "workspace:*",
+    "agent-device": "workspace:*"
+  },
+  "publishConfig": {
+    "exports": {
+      ".": {
+        "import": "./dist/agent-device.mjs"
+      },
+      "./agent-device": {
+        "import": "./dist/agent-device.mjs"
+      }
+    },
+    "access": "public"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/mobilebox-dev/mobilebox/tree/main/packages/agent-device#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mobilebox-dev/mobilebox.git",
+    "directory": "packages/agent-device"
+  },
+  "bugs": {
+    "url": "https://github.com/mobilebox-dev/mobilebox/issues"
+  },
+  "private": true
+}

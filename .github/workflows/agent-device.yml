@@ -1,0 +1,30 @@
+name: agent-device plugin
+on:
+  push:
+    branches: [main]
+    paths: ['packages/agent-device/**', 'packages/mobilebox/**', '.github/workflows/agent-device.yml', '.github/workflows/publish.yml']
+  pull_request:
+    paths: ['packages/agent-device/**', 'packages/mobilebox/**', '.github/workflows/agent-device.yml', '.github/workflows/publish.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      # Clones agent-device at AGENT_DEVICE_VERSION, tests, type-checks, builds, runs Callstack's package check, packs.
+      - run: DIST_OUT=../mobilebox/agent-device packages/agent-device/scripts/build.sh
+      # What publish.yml would publish: the mobilebox package with the plugin as ./agent-device.
+      - run: npm pack
+        working-directory: packages/mobilebox
+      - uses: actions/upload-artifact@v7
+        with:
+          name: mobilebox-npm
+          path: packages/mobilebox/mobilebox-*.tgz

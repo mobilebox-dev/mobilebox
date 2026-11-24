@@ -1,0 +1,59 @@
+{
+  "name": "mobilebox",
+  "version": "0.2.0",
+  "description": "Mobilebox for AI agents: watch a phone live (npx mobilebox watch), give Vercel AI SDK agents cloud Android phones and iPhone simulators as tools, and drive Mobilebox phones from agent-device (plugin: mobilebox/agent-device).",
+  "type": "module",
+  "bin": {
+    "mobilebox": "mobilebox.js"
+  },
+  "files": [
+    "mobilebox.js",
+    "ai.js",
+    "agent-device",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "homepage": "https://mobilebox.dev",
+  "license": "MIT",
+  "scripts": {
+    "prepack": "node build.ts ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mobilebox-dev/mobilebox.git",
+    "directory": "packages/mobilebox"
+  },
+  "keywords": [
+    "mobile",
+    "android",
+    "iphone",
+    "ai-agents",
+    "mcp",
+    "sandbox",
+    "cloud-phone",
+    "automation",
+    "live-view",
+    "ai-sdk",
+    "vercel-ai-sdk",
+    "agent-device"
+  ],
+  "author": "fifteenA, Inc.",
+  "exports": {
+    "./ai": "./ai.js",
+    "./agent-device": {
+      "import": "./agent-device/agent-device.mjs"
+    },
+    "./package.json": "./package.json"
+  },
+  "peerDependencies": {
+    "@ai-sdk/mcp": ">=1"
+  },
+  "peerDependenciesMeta": {
+    "@ai-sdk/mcp": {
+      "optional": true
+    }
+  }
+}

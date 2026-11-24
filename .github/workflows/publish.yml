@@ -1,0 +1,33 @@
+# Publishes the `mobilebox` npm package with trusted publishing: npm trusts this workflow over OIDC, so no token lives
+# anywhere, and each release carries provenance. Release: bump packages/mobilebox/package.json, merge, then push the
+# tag npm/v<version> (e.g. npm/v0.2.0).
+# One-time setup on npmjs.com (package mobilebox > Settings > Trusted publishing): GitHub Actions, organization
+# mobilebox-dev, repository mobilebox, workflow publish.yml.
+name: publish
+on:
+  push:
+    tags: ['npm/v*']
+permissions:
+  contents: read
+  id-token: write # the OIDC token npm exchanges for a one-off publish credential
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org
+      - run: npm install -g npm@latest # trusted publishing needs npm 11.5.1 or newer
+      - name: Tag matches the package version
+        working-directory: packages/mobilebox
+        run: test "${GITHUB_REF_NAME#npm/v}" = "$(node -p "require('./package.json').version")"
+      # The agent-device plugin, built inside agent-device at AGENT_DEVICE_VERSION with Callstack's package check,
+      # becomes the package's ./agent-device export.
+      - name: Build the agent-device plugin
+        run: DIST_OUT=../mobilebox/agent-device packages/agent-device/scripts/build.sh
+      - name: Publish (prepack builds mobilebox.js from watch.ts)
+        working-directory: packages/mobilebox
+        run: npm publish --access public --provenance
