@@ -1,0 +1,57 @@
+name: vm-phones
+# Research (phonebox#374): Android 15/16 as VM-isolated phones on a KVM runner: the emulator and Cuttlefish.
+# Runs on pushes to its research branch only; uses no secrets and no Mobilebox credit.
+on:
+  push:
+    branches: [research/vm-phones]
+
+permissions:
+  contents: read
+
+jobs:
+  emulator:
+    name: emulator, Android API ${{ matrix.api }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    strategy:
+      fail-fast: false
+      matrix:
+        api: [35, 36]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - run: benchmarks/vm/emulator.sh
+        env:
+          API: ${{ matrix.api }}
+          OUT: ${{ github.workspace }}/benchmarks/results/vm-emulator-${{ matrix.api }}.csv
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: vm-emulator-${{ matrix.api }}
+          path: benchmarks/results/vm-*.csv
+
+  cuttlefish:
+    name: Cuttlefish
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v7
+      - name: Free disk (images are several GB)
+        run: sudo rm -rf /usr/share/dotnet /usr/local/lib/android /opt/ghc /usr/local/.ghcup && df -h /
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
+      - run: benchmarks/vm/cuttlefish.sh
+        env:
+          OUT: ${{ github.workspace }}/benchmarks/results/vm-cuttlefish.csv
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: vm-cuttlefish
+          path: |
+            benchmarks/results/vm-*.csv
+            ~/cf/cuttlefish_runtime/launcher.log
