@@ -18,6 +18,7 @@ sudo chmod a+r /etc/apt/trusted.gpg.d/artifact-registry.asc
 echo "deb https://us-apt.pkg.dev/projects/android-cuttlefish-artifacts android-cuttlefish main" | sudo tee /etc/apt/sources.list.d/artifact-registry.list > /dev/null
 sudo apt-get update -qq && sudo apt-get install -y -qq cuttlefish-base cuttlefish-user > apt.log 2>&1 || { tail -20 apt.log; rec error 0 '' '' 'host packages did not install'; exit 1; }
 sudo usermod -aG kvm,cvdnetwork,render "$USER"
+sudo modprobe vhost_vsock; sudo modprobe vhost_net; ls -l /dev/vhost-vsock /dev/vhost-net # CI runners don't load them
 rec setup_packages 0 $(( $(ms) - t )) ms "$(dpkg-query -W -f '${Version}' cuttlefish-base)"
 
 # The rest as a fresh login of this user, so the new groups apply.
@@ -39,7 +40,7 @@ rec image_mb 0 "$(du -sm ~/cf | cut -f1)" MB "host tools + images"
 
 launch() { # extra args...; prints ms to boot_completed + screenshot, or nothing
   local t0; t0=$(ms)
-  as_user "cd ~/cf && HOME=\$HOME/cf ./bin/launch_cvd --daemon --report_anonymous_usage_stats=n --memory_mb=4096 --cpus=2 --gpu_mode=guest_swiftshader $*" > launch.log 2>&1 || { tail -15 launch.log >&2; return; }
+  as_user "cd ~/cf && HOME=\$HOME/cf ./bin/launch_cvd --daemon --report_anonymous_usage_stats=n --memory_mb=4096 --cpus=2 --gpu_mode=guest_swiftshader --enable_sandbox=false $*" > launch.log 2>&1 || { tail -15 launch.log >&2; return; }
   while [ $(( ($(ms) - t0) / 1000 )) -lt "$BOOT_LIMIT" ]; do
     [ "$(timeout 10 ~/cf/bin/adb -s 0.0.0.0:6520 shell getprop sys.boot_completed 2>/dev/null | tr -d '\r')" = 1 ] && { ~/cf/bin/adb -s 0.0.0.0:6520 exec-out screencap -p > /dev/null; echo $(( $(ms) - t0 )); return; }
     ~/cf/bin/adb connect 0.0.0.0:6520 > /dev/null 2>&1; sleep 2

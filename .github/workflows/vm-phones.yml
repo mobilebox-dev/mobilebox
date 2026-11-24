@@ -10,6 +10,7 @@ permissions:
 
 jobs:
   emulator:
+    if: false # measured in run 45346108063
     name: emulator, Android API ${{ matrix.api }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -39,7 +40,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runner: [ubuntu-24.04, ubuntu-24.04-arm] # Google's cuttlefish packages target 24.04 (libxml2)
+        runner: [ubuntu-24.04] # Google's cuttlefish packages target 24.04 (libxml2); the arm64 runner has no /dev/kvm (24 Nov)
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
