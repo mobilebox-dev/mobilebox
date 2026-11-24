@@ -10,7 +10,6 @@ permissions:
 
 jobs:
   emulator:
-    if: false # measured in run 45346108063
     name: emulator, Android API ${{ matrix.api }}
     runs-on: ubuntu-latest
     timeout-minutes: 90

@@ -45,6 +45,7 @@ adb start-server > /dev/null 2>&1
 t=$(boot -no-snapshot-load)
 if [ -n "$t" ]; then
   rec abilist 1 "$(adb shell getprop ro.product.cpu.abilist | tr -d '\r' | tr , ' ')" abis "native bridge: $(adb shell getprop ro.dalvik.vm.native.bridge | tr -d '\r')"
+  rec arm64_only_app 1 "$(ADB=adb bash "$(dirname "$0")/armapp.sh")" result "VLC arm64-v8a build"
   sleep 60
   pid=$(pgrep -f qemu-system-x86_64 | head -1)
   rec rss_idle 1 "$(( $(ps -o rss= -p "$pid") / 1024 ))" MB "qemu RSS 60 s after boot, -memory 2048"

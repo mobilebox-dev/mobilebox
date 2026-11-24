@@ -46,20 +46,21 @@ launch() { # extra args...; prints ms to boot_completed + screenshot, or nothing
     ~/cf/bin/adb connect 0.0.0.0:6520 > /dev/null 2>&1; sleep 2
   done
 }
-stop() { as_user "cd ~/cf && HOME=\$HOME/cf ./bin/stop_cvd" > /dev/null 2>&1; sleep 2; }
+stop() { as_user "cd ~/cf && HOME=\$HOME/cf ./bin/stop_cvd" > stop.log 2>&1; for _ in $(seq 30); do pgrep -f 'crosvm|run_cvd' > /dev/null || break; sleep 1; done; }
 
 for run in $(seq 1 "$RUNS"); do
   t=$(launch --resume=false)
   if [ -n "$t" ]; then
     [ "$run" = 1 ] && ANDROID=$(~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.build.version.release | tr -d '\r') && sed -i "s/^cuttlefish,unknown,/cuttlefish,$ANDROID,/" "$OUT"
     rec cold_boot_to_screenshot "$run" "$t" ms "fresh userdata, $fetched"
-  else rec error "$run" '' '' "cold boot: $(grep -m1 -iE 'error|fail' ~/cf/cuttlefish_runtime/launcher.log 2>/dev/null)"; fi
+  else rec error "$run" '' '' "cold boot: $(grep -vE 'managed_stdio|CONFIG_' launch.log | grep -m2 -iE ' E |error|fail' | tr '\n"' ' ' | cut -c1-300)"; fi
   if [ "$run" = 1 ] && [ -n "$t" ]; then
     sleep 60
     rss=0; for p in $(pgrep -f crosvm); do rss=$(( rss + $(ps -o rss= -p "$p") )); done
     rec rss_idle 1 $(( rss / 1024 )) MB "all crosvm processes, 60 s after boot, --memory_mb=4096"
     rec cpu_idle 1 "$(top -b -n 2 -d 5 | awk '/crosvm/ {s+=$9} END {print s}')" '%' "crosvm, of one core, 5 s sample"
     ~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.build.fingerprint
+    rec arm64_only_app 1 "$(ADB="$HOME/cf/bin/adb -s 0.0.0.0:6520" bash "$(dirname "$0")/armapp.sh")" result "VLC arm64-v8a build"
     rec abilist 1 "$(~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.product.cpu.abilist | tr -d '\r' | tr , ' ')" abis "native bridge: $(~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.dalvik.vm.native.bridge | tr -d '\r')"
   fi
   stop
@@ -67,7 +68,7 @@ done
 # Restart: the same disk (apps and data kept), what a parked phone's start would be.
 for run in $(seq 1 "$RUNS"); do
   t=$(launch --resume=true)
-  [ -n "$t" ] && rec restart_kept_disk_to_screenshot "$run" "$t" ms || rec error "r$run" '' '' 'restart failed'
+  [ -n "$t" ] && rec restart_kept_disk_to_screenshot "$run" "$t" ms || rec error "r$run" '' '' "restart: $(grep -vE 'managed_stdio|CONFIG_' launch.log | grep -m2 -iE ' E |error|fail' | tr '\n"' ' ' | cut -c1-300)"
   stop
 done
 cat "$OUT"
