@@ -66,7 +66,7 @@ export class MobileboxClient {
     if (!res.ok) {
       const body = (await res.json().catch(() => null)) as { error?: { code?: string; message?: string; next?: string } } | null;
       throw new AppError(
-        res.status === 401 || res.status === 403 ? 'INVALID_ARGS' : 'COMMAND_FAILED',
+        res.status === 401 || res.status === 403 ? 'UNAUTHORIZED' : 'COMMAND_FAILED',
         `Mobilebox ${method} ${path.split('?')[0]}: ${body?.error?.message ?? res.statusText}`,
         { status: res.status, code: body?.error?.code, ...(body?.error?.next ? { hint: body.error.next } : {}) },
       );
