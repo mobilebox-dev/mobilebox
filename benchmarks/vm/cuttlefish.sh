@@ -23,7 +23,12 @@ rec setup_packages 0 $(( $(ms) - t )) ms "$(dpkg-query -W -f '${Version}' cuttle
 # The rest as a fresh login of this user, so the new groups apply.
 as_user() { sudo -u "$USER" -H bash -lc "$*"; }
 t=$(ms); fetched=
-for build in aosp-android-latest-release/aosp_cf_x86_64_only_phone-userdebug aosp-main/aosp_cf_x86_64_phone-trunk_staging-userdebug; do
+case $(uname -m) in
+  aarch64) BUILDS="aosp-android-latest-release/aosp_cf_arm64_only_phone-userdebug aosp-main/aosp_cf_arm64_only_phone-trunk_staging-userdebug" ;;
+  *) BUILDS="aosp-android-latest-release/aosp_cf_x86_64_only_phone-userdebug aosp-main/aosp_cf_x86_64_phone-trunk_staging-userdebug" ;;
+esac
+[ -e /dev/kvm ] || { rec error 0 '' '' "no /dev/kvm on this runner ($(uname -m))"; cat "$OUT"; exit 0; }
+for build in $BUILDS; do
   rm -rf ~/cf; mkdir -p ~/cf
   if as_user "cd ~/cf && cvd fetch --default_build=$build --target_directory=\$HOME/cf" > fetch.log 2>&1; then fetched=$build; break; fi
   tail -5 fetch.log
@@ -54,6 +59,7 @@ for run in $(seq 1 "$RUNS"); do
     rec rss_idle 1 $(( rss / 1024 )) MB "all crosvm processes, 60 s after boot, --memory_mb=4096"
     rec cpu_idle 1 "$(top -b -n 2 -d 5 | awk '/crosvm/ {s+=$9} END {print s}')" '%' "crosvm, of one core, 5 s sample"
     ~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.build.fingerprint
+    rec abilist 1 "$(~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.product.cpu.abilist | tr -d '\r' | tr , ' ')" abis "native bridge: $(~/cf/bin/adb -s 0.0.0.0:6520 shell getprop ro.dalvik.vm.native.bridge | tr -d '\r')"
   fi
   stop
 done

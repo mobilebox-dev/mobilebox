@@ -34,8 +34,12 @@ jobs:
           path: benchmarks/results/vm-*.csv
 
   cuttlefish:
-    name: Cuttlefish
-    runs-on: ubuntu-latest
+    name: Cuttlefish ${{ matrix.runner }}
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, ubuntu-24.04-arm]
     timeout-minutes: 120
     steps:
       - uses: actions/checkout@v7
@@ -47,11 +51,11 @@ jobs:
           sudo udevadm control --reload-rules && sudo udevadm trigger --name-match=kvm
       - run: benchmarks/vm/cuttlefish.sh
         env:
-          OUT: ${{ github.workspace }}/benchmarks/results/vm-cuttlefish.csv
+          OUT: ${{ github.workspace }}/benchmarks/results/vm-cuttlefish-${{ matrix.runner }}.csv
       - uses: actions/upload-artifact@v7
         if: always()
         with:
-          name: vm-cuttlefish
+          name: vm-cuttlefish-${{ matrix.runner }}
           path: |
             benchmarks/results/vm-*.csv
             ~/cf/cuttlefish_runtime/launcher.log
