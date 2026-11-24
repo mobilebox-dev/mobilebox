@@ -31,4 +31,6 @@ jobs:
         run: DIST_OUT=../mobilebox/agent-device packages/agent-device/scripts/build.sh
       - name: Publish (prepack builds mobilebox.js from watch.ts)
         working-directory: packages/mobilebox
+        env:
+          NPM_CONFIG_LOGLEVEL: verbose # npm logs why an OIDC exchange failed only at this level
         run: npm publish --access public --provenance
