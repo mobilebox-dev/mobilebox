@@ -72,7 +72,7 @@ $('preview').onsubmit = async (e) => {
   e.preventDefault()
   const endUser = $('user').value.trim()
   $('go').disabled = true
-  say('Getting the phone ready and loading the app… (about 10–30 s)')
+  say('Getting the phone ready and putting the app on screen…')
   $('phone').textContent = 'Starting the phone…' // an ended preview would linger here otherwise
   try {
     const r = await post('/api/preview', { endUser, source: $('source').value.trim() })
@@ -80,7 +80,7 @@ $('preview').onsubmit = async (e) => {
     $('phone').append(Object.assign(document.createElement('iframe'), { src: r.url, title: `Phone preview for ${endUser}`, allow: 'clipboard-write' }))
     $('phone').scrollIntoView({ block: 'nearest' })
     shown = endUser
-    say(`${r.loaded} Phone ${r.phone}, ${r.display_hz ?? 15} Hz. Link valid until ${new Date(r.expires_at).toLocaleTimeString()}.${r.notice ? ` ${r.notice}` : ''}`)
+    say(`${r.loaded} Phone ${r.phone}${r.reused ? `, ${endUser}'s own again` : ', new'}. Link valid until ${new Date(r.expires_at).toLocaleTimeString()}.${r.notice ? ` ${r.notice}` : ''}`)
   } catch (err) { say(err.message, true); $('phone').textContent = 'No preview.'; shown = null } finally { $('go').disabled = false }
 }
 
