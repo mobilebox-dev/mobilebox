@@ -12,6 +12,7 @@ One runnable file per agent framework. Each one creates a Mobilebox phone, gives
 | Vercel AI SDK | [vercel-ai-sdk/agent.ts](vercel-ai-sdk/agent.ts) | `npm i ai @ai-sdk/mcp @ai-sdk/openai` | MCP, `createMCPClient` |
 | Claude Agent SDK | [claude-agent-sdk/agent.ts](claude-agent-sdk/agent.ts) | `npm i @anthropic-ai/claude-agent-sdk` | MCP, `mcpServers` |
 | OpenHands | [openhands/agent.py](openhands/agent.py) | `pip install openhands-sdk openhands-tools` | MCP, `mcp_config`; uploads its builds over REST |
+| Haystack | [haystack/agent.py](haystack/agent.py) | `pip install haystack-ai mcp-haystack` | MCP, `MCPToolset` |
 
 Run one:
 
@@ -23,6 +24,6 @@ python openai-agents/agent.py      # Node 24 runs the .ts files directly: node m
 
 OpenHands runs a different task: from your app's repo it builds the app (`BUILD`, default `./gradlew assembleDebug`; `APK`, its output), runs it on the phone, reads the crash log, fixes the code, checks the fix and pushes. Its model comes from `LLM_MODEL` and `LLM_API_KEY` (LiteLLM ids, `LLM_BASE_URL` for OpenAI-compatible endpoints).
 
-`MODEL` picks another model where the framework takes a model id (LangGraph `provider:model`, CrewAI and Mastra `provider/model`). The OpenAI SDKs also read `OPENAI_BASE_URL`, so any OpenAI-compatible endpoint works.
+`MODEL` picks another model where the framework takes a model id (LangGraph `provider:model`, CrewAI and Mastra `provider/model`, Haystack an OpenAI model id). The OpenAI SDKs also read `OPENAI_BASE_URL`, so any OpenAI-compatible endpoint works.
 
 **The pattern.** Your code owns the phone's lifecycle: it creates the phone over REST, passes the id to the agent and deletes the phone in `finally`. The agent only drives it: `observe`, `act`, `screenshot`, `install_app`. One phone per task keeps runs independent and the bill bounded. Guides for each framework: https://mobilebox.dev/integrations

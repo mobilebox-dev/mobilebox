@@ -180,7 +180,7 @@ Each creates a phone, checks one outcome and deletes the phone, also when the ch
 | [github-actions/](examples/github-actions) | APK smoke test in a workflow | a repo secret with your key |
 | [proof-demo-calculator](https://github.com/mobilebox-dev/proof-demo-calculator/pulls?q=is%3Apr) | a real app (a Fossify Calculator fork) where every PR gets a proof comment: last screen, steps, time, cost | nothing: open its pull requests |
 | [packages/python/](packages/python) | `mobilebox` Python client and `langchain-mobilebox` LangChain tools | Python 3.10+ |
-| [integrations/](examples/integrations) | OpenAI Agents SDK, LangGraph, CrewAI, browser-use, Mastra, Vercel AI SDK, Claude Agent SDK | the framework and a model key |
+| [integrations/](examples/integrations) | OpenAI Agents SDK, LangGraph, CrewAI, browser-use, Mastra, Vercel AI SDK, Claude Agent SDK, OpenHands, Haystack | the framework and a model key |
 
 ## Guides
 
