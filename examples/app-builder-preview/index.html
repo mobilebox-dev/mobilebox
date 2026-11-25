@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>App preview · Mobilebox example</title>
+<style>
+  :root { color-scheme: light dark; --edge: color-mix(in srgb, currentColor 18%, transparent); --muted: color-mix(in srgb, currentColor 62%, transparent); }
+  body { font: 15px/1.5 system-ui, sans-serif; margin: 0; padding: 24px; display: grid; grid-template-columns: minmax(300px, 440px) auto; gap: 32px; align-items: start; }
+  h1 { font-size: 20px; margin: 0 0 4px; } h2 { font-size: 15px; margin: 24px 0 8px; }
+  p.lede { margin: 0 0 20px; color: var(--muted); }
+  label { display: block; font-weight: 600; margin: 14px 0 4px; }
+  input { width: 100%; box-sizing: border-box; font: inherit; padding: 8px 10px; border: 1px solid var(--muted); border-radius: 8px; background: transparent; color: inherit; }
+  .hint { font-size: 13px; color: var(--muted); margin-top: 4px; } .hint button { font: inherit; padding: 0; border: 0; background: none; color: LinkText; cursor: pointer; text-decoration: underline; }
+  .actions { display: flex; gap: 10px; margin-top: 16px; }
+  .actions button { font: inherit; padding: 9px 16px; border-radius: 8px; border: 1px solid var(--edge); background: transparent; color: inherit; cursor: pointer; }
+  .actions button.primary { order: 2; background: CanvasText; color: Canvas; border-color: CanvasText; } /* the next step sits last */
+  button:disabled { opacity: .5; cursor: default; }
+  #status { margin-top: 12px; min-height: 1.5em; } #status.error, td.error { color: light-dark(#b42318, #ff8a7a); }
+  table { width: 100%; border-collapse: collapse; font-size: 14px; } td, th { text-align: left; padding: 5px 8px 5px 0; border-bottom: 1px solid var(--edge); } td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  ol#log { list-style: none; padding: 0; margin: 0; font: 13px/1.6 ui-monospace, monospace; max-height: 220px; overflow: auto; }
+  .phone { width: 360px; height: min(800px, calc(100vh - 48px)); position: sticky; top: 24px; border-radius: 28px; overflow: hidden; border: 1px solid var(--edge); display: grid; place-items: center; text-align: center; color: var(--muted); padding: 0; }
+  .phone iframe { width: 100%; height: 100%; border: 0; display: block; } /* the embed fits the phone into any frame */
+  @media (max-width: 900px) { body { grid-template-columns: 1fr; } .phone { width: min(360px, 100%); height: min(800px, 80vh); position: static; order: -1; } }
+</style>
+</head>
+<body>
+<main>
+  <h1>Preview your user's app on a cloud phone</h1>
+  <p class="lede">A cloud Android phone per end user, live in this page. The API key never leaves the server.</p>
+
+  <form id="preview">
+    <label for="user">End user</label>
+    <input id="user" name="user" value="user_42" autocomplete="off" required pattern="[\w.@:+\-]{1,128}" title="Letters, digits and . _ - @ : +, up to 128" aria-describedby="user-hint">
+    <div class="hint" id="user-hint">Your id for the person this preview is for. Their phone is reused, and their minutes add up under it. Park it when they're done.</div>
+
+    <label for="source">App</label>
+    <input id="source" name="source" placeholder="https://…/app.apk or exp://…" autocomplete="off" required aria-describedby="source-hint">
+    <div class="hint" id="source-hint">An APK download URL, or the link <code>npx expo start --tunnel</code> prints. Try
+      <button type="button" data-source="https://f-droid.org/repo/org.billthefarmer.editor_198.apk">an F-Droid APK</button>.</div>
+
+    <div class="actions">
+      <button type="submit" class="primary" id="go">Preview</button>
+      <button type="button" id="park">Park phone</button>
+    </div>
+    <div id="status" role="status" aria-live="polite"></div>
+  </form>
+
+  <h2>Phone state <small id="hooks" class="hint"></small></h2>
+  <ol id="log" tabindex="0" aria-label="Phone events"><li class="hint">No phone events yet.</li></ol>
+
+  <h2>Usage per end user, last 30 days <small class="hint"><button type="button" id="refresh">Refresh</button></small></h2>
+  <table><thead><tr><th>End user</th><th class="num">Minutes</th><th class="num">Cost</th></tr></thead><tbody id="usage"><tr><td colspan="3" class="hint">Loading…</td></tr></tbody></table>
+</main>
+
+<div class="phone" id="phone">Your user's phone shows here.</div>
+
+<script>
+const $ = (id) => document.getElementById(id)
+const say = (text, error = false) => { $('status').textContent = text; $('status').className = error ? 'error' : '' }
+const post = async (path, body) => {
+  const res = await fetch(path, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(body) })
+  // A tunnel or proxy in between answers its own HTML page on a timeout: say what happened, not "Unexpected token".
+  const data = await res.json().catch(() => ({ error: `${res.status} ${res.statusText || 'from the network'}. Try again.` }))
+  if (!res.ok) throw new Error([data.error, data.next].filter(Boolean).join(' '))
+  return data
+}
+for (const b of document.querySelectorAll('[data-source]')) b.onclick = () => { $('source').value = b.dataset.source; $('source').focus() }
+
+let shown = null // the end user whose phone is on screen: Park acts on it
+$('preview').onsubmit = async (e) => {
+  e.preventDefault()
+  const endUser = $('user').value.trim()
+  $('go').disabled = true
+  say('Getting the phone ready and loading the app… (about 10–30 s)')
+  $('phone').textContent = 'Starting the phone…' // an ended preview would linger here otherwise
+  try {
+    const r = await post('/api/preview', { endUser, source: $('source').value.trim() })
+    $('phone').innerHTML = ''
+    $('phone').append(Object.assign(document.createElement('iframe'), { src: r.url, title: `Phone preview for ${endUser}`, allow: 'clipboard-write' }))
+    $('phone').scrollIntoView({ block: 'nearest' })
+    shown = endUser
+    say(`${r.loaded} Phone ${r.phone}, ${r.display_hz ?? 15} Hz. Link valid until ${new Date(r.expires_at).toLocaleTimeString()}.${r.notice ? ` ${r.notice}` : ''}`)
+  } catch (err) { say(err.message, true); $('phone').textContent = 'No preview.'; shown = null } finally { $('go').disabled = false }
+}
+
+$('park').onclick = async () => {
+  const endUser = shown ?? $('user').value.trim()
+  try { const r = await post('/api/park', { endUser }); say(`Parked ${endUser}'s phone ${r.phone}: apps and data stay, billing stops.`) } catch (err) { say(err.message, true) }
+}
+
+// The embed says when it goes live or ends; an ended link needs a new one from the server.
+addEventListener('message', (e) => {
+  if (e.origin !== 'https://mobilebox.dev') return
+  if (e.data?.type === 'mobilebox:end') say(`The preview ended (${e.data.reason}). Press Preview for a new link.`, e.data.reason !== 'parked')
+})
+
+// Phone states arrive as signed webhooks on the server; the page asks for new ones every 2 s.
+const line = (text) => { const li = document.createElement('li'); li.textContent = text; $('log').prepend(li) }
+let since = 0
+async function poll() {
+  try {
+    const { webhooks, events } = await (await fetch(`/api/events?since=${since}`)).json()
+    $('hooks').textContent = webhooks ? '· from signed webhooks' : '· webhooks off (see the server log)'
+    if (events.length && $('log').firstElementChild?.classList.contains('hint')) $('log').innerHTML = ''
+    for (const m of events) {
+      since = m.seq
+      line(`${new Date(m.at).toLocaleTimeString()}  ${m.type.padEnd(13)} ${m.end_user ?? '-'}  ${m.phone}${m.reason ? `  (${m.reason})` : ''}`)
+      if (m.type !== 'phone.ready') loadUsage()
+    }
+  } finally { setTimeout(poll, 2000) }
+}
+poll()
+
+async function loadUsage() {
+  const note = (text, error) => { $('usage').innerHTML = ''; $('usage').append(Object.assign(document.createElement('tr'), { innerHTML: '<td colspan="3"></td>' })); Object.assign($('usage').querySelector('td'), { textContent: text, className: error ? 'error' : 'hint' }) }
+  let rows
+  try {
+    const res = await fetch('/api/usage')
+    rows = await res.json()
+    if (!res.ok) return note(`Couldn't load usage: ${rows.error}`, true)
+  } catch { return note("Couldn't load usage: the server didn't answer. Refresh to try again.", true) }
+  $('usage').innerHTML = ''
+  if (!rows.length) return note('No minutes yet: they show once a phone parks or is deleted.')
+  for (const u of rows) {
+    const tr = document.createElement('tr')
+    tr.append(...[u.end_user ?? '(no label)', Number(u.minutes).toFixed(1), `$${Number(u.cost_usd).toFixed(2)}`].map((v, i) => Object.assign(document.createElement('td'), { textContent: v, className: i ? 'num' : '' })))
+    $('usage').append(tr)
+  }
+}
+$('refresh').onclick = loadUsage
+loadUsage()
+</script>
+</body>
+</html>
