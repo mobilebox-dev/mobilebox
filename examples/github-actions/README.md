@@ -1,6 +1,6 @@
 # GitHub Actions: APK smoke test
 
-Upload the build to a fresh cloud phone, open it, wait for one label that proves launch, delete the phone. No emulator on the runner.
+Upload the build to a fresh cloud phone, open it, wait for one label that proves launch, delete the phone. No emulator on the runner: why the emulator stalls on runners without KVM, and what else works, is in [Android emulator without KVM](https://mobilebox.dev/blog/android-emulator-without-kvm).
 
 1. Copy [smoke.mjs](smoke.mjs) to your repo root and [android-smoke.yml](android-smoke.yml) to `.github/workflows/`.
 2. Add the repository secret `MOBILESANDBOX_API_KEY`.
