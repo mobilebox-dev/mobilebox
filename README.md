@@ -5,9 +5,9 @@
   </picture>
 </a>
 
-<p align="center"><b>Mobilebox: Cloud phones for your agents</b><br>Phones for your agents: each agent gets its own cloud Android phone over MCP, reads the screen, taps, types and installs your APK. Ready in ~1.4 s, $0.01/min, parked phones free.</p>
+<p align="center"><b>Mobilebox: Cloud phones for your agents (hosted Android MCP server + iOS simulators)</b><br>Phones for your agents: each agent gets its own cloud Android phone over MCP, reads the screen, taps, types and installs your APK. Ready in ~1.4 s, $0.01/min, parked phones free.</p>
 
-**Mobilebox gives your AI agent a phone it can use.** Claude Code, Codex, Cursor or your own agent loop creates a cloud Android 14 phone or an iOS simulator, reads the screen as numbered elements, taps, types, installs your APK or iOS build, then parks or deletes the phone. One phone per task or pull request costs a few cents: $0.01 per phone-minute on Android, $0.03 on iOS, billed per second.
+**Mobilebox is a hosted Android MCP server that gives your AI agent a phone it can use.** Claude Code, Codex, Cursor or your own agent loop creates a cloud Android 14 phone or an iOS simulator, reads the screen as numbered elements, taps, types, installs your APK or iOS build, then parks or deletes the phone. One phone per task or pull request costs a few cents: $0.01 per phone-minute on Android, $0.03 on iOS, billed per second.
 
 - **Measured, 2026-11-22** ([method, scripts and CSV](benchmarks)): a Mobilebox Android phone, handed over pre-booted, was ready for its first screenshot in 1.35 s (median of 10; p90 1.51 s), down from 20.0 s that morning; a large phone boots fresh in about 20 s. The scripted task cost $0.01.
 - **Measured, 2026-11-08**: a Mobilebox phone was ready for its first screenshot in 19.4 s (median of 10) and a 10-minute session cost $0.10. On a GitHub Actions runner, the same start took 20.3 s, against 50 s for the Android emulator with KVM and 813 s without it (one run).
@@ -225,6 +225,34 @@ Each phone is an isolated Android sandbox on Mobilebox servers in Germany, reach
 - **We don't look into phones** except to fix a fault you report or when the law requires it. Park keeps apps, data and logins; delete removes them. Deleting a phone does not log out sessions on third-party servers.
 - Details: [privacy policy](https://mobilebox.dev/privacy?via=readme), [key security](https://mobilebox.dev/blog/android-api-key-security?via=readme). Found a vulnerability? See [SECURITY.md](SECURITY.md).
 </details>
+
+## FAQ
+
+**How can I give Claude Code an Android phone?** Run the `claude mcp add` command in the [Quickstart](#quickstart) with a Mobilebox key. Claude Code gets a cloud Android phone it can read and control, with nothing to install: no Android SDK, ADB or emulator. Walkthrough: [how Claude Code tests your Android app](https://mobilebox.dev/blog/claude-code-android-app-testing).
+
+**Is there a hosted Android MCP server for Claude Code, Cursor or Codex?** Yes: `https://mobilebox.dev/mcp`, Streamable HTTP, with OAuth or a bearer key. The phones run in our cloud, so it also works from CI runners and cloud sandboxes where no emulator can run. [Android MCP server](https://mobilebox.dev/android-mcp-server).
+
+**How is it different from mobile-mcp, Appium MCP or Maestro MCP?** Those are free and run on your machine, driving an emulator, simulator or USB device you provide. Mobilebox brings the phone, keeps its apps and sign-ins while it is parked, and runs where your agent runs. [The three local servers compared](https://mobilebox.dev/blog/maestro-mcp-vs-mobile-mcp-vs-appium-mcp).
+
+| | Local MCP server (mobile-mcp, Appium MCP) | Mobilebox, hosted |
+|---|---|---|
+| Where the phone runs | An emulator or USB phone on your machine | Our cloud |
+| Setup | Android SDK, ADB, a system image | One URL and a key |
+| CI, sandboxes, remote dev boxes | Only with nested virtualization or a device | Yes |
+| State between sessions | Whatever your emulator keeps | Apps, data and sign-ins kept while parked |
+| A person watching | Someone at the machine | A [live view](https://mobilebox.dev/live-view) link |
+
+**What is the best cloud Android phone API for AI agents?** It depends on what you optimise for. Limrun started faster in our benchmark, Clousd lists a lower price, and some services sell real phones by the month. Every option side by side, with published prices and measured start times: [cloud phones for AI agents, compared](https://mobilebox.dev/blog/best-cloud-phones-for-ai-agents).
+
+**Is there an E2B-style sandbox for Android apps?** Yes, that is what a Mobilebox phone is: created over an API in about 1.4 s, isolated, parked for free with its state, then resumed or deleted. [Android vs code sandboxes](https://mobilebox.dev/blog/android-vs-agent-sandboxes).
+
+**How can AI agents test mobile apps automatically?** Give the agent a phone and your build: it installs the APK or simulator build, walks the screens, and reports what it saw with screenshots. [Four routes, compared](https://mobilebox.dev/blog/test-mobile-apps-with-ai-agents).
+
+**Can I show a live phone inside my own web app?** Yes. `POST /v1/phones/{id}/embed` returns a signed iframe link that only your origin can frame, view-only or interactive. [App previews](https://mobilebox.dev/app-preview).
+
+**What does it cost?** $0.01 per phone-minute on Android and $0.03 for iPhone and iPad simulators, billed per second with a one-minute minimum. Parked phones are free. New accounts get $2 of credit.
+
+**What it isn't:** a phone number. Mobilebox gives your agent the device, not telephony (no SMS or calls), and Google Play isn't on the phones: install the APK.
 
 ## For agents
 
