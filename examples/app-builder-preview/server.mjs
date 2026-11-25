@@ -18,7 +18,7 @@ const HOOK_URL = `${PUBLIC_URL}/webhooks/mobilebox`
 
 // --- Mobilebox REST, server-side only -----------------------------------------------------------------------------
 async function mb(method, path, body) {
-  const res = await fetch(API + path, {
+  const res = await fetch(API + path, { signal: AbortSignal.timeout(300_000), // a new phone, a big APK: a preview can take a minute or two
     method, headers: { authorization: `Bearer ${KEY}`, ...(body && { 'content-type': 'application/json' }) },
     ...(body && { body: JSON.stringify(body) }),
   })
@@ -26,31 +26,12 @@ async function mb(method, path, body) {
   if (!res.ok) throw Object.assign(new Error(data?.error?.message ?? `${res.status}`), { status: res.status, mb: data?.error })
   return data
 }
-// Waits cap at 55 s per call; a phone still booting is normal, so ask again.
-async function ready(phone) {
-  while (phone.status === 'creating' || phone.status === 'starting') phone = await mb('GET', `/phones/${phone.id}?wait=ready`)
-  if (phone.status !== 'ready') throw new Error(`phone ${phone.id} is ${phone.status}`)
-  return phone
-}
-
-// One phone per end user: reuse it (start it if parked), or make it with the end_user label and a 30 Hz display.
-async function phoneFor(endUser) {
-  const [mine] = (await mb('GET', `/phones?end_user=${encodeURIComponent(endUser)}`)).data
-  if (mine?.status === 'parked') return ready(await mb('POST', `/phones/${mine.id}/start?wait=ready`))
-  if (mine) return ready(mine)
-  return ready(await mb('POST', '/phones?wait=ready', { end_user: endUser, display_hz: 30, name: `preview-${endUser}`.slice(0, 64) }))
-}
-
-// The builder's app on the phone: an Expo link opens in Expo Go (Mobilebox installs the matching one), an APK URL installs.
-async function load(phone, source) {
-  if (/^exps?:\/\/|^https:\/\/(\w+\.)?expo\.dev\//.test(source)) {
-    const { results } = await mb('POST', `/phones/${phone.id}/actions`, { actions: [{ type: 'open_url', url: source }] })
-    if (!results[0].ok) throw new Error(results[0].error.message)
-    return results[0].note ?? 'Opened the Expo link.'
-  }
-  const app = await mb('POST', `/phones/${phone.id}/apps`, { url: source, replace: true })
-  await mb('POST', `/phones/${phone.id}/actions`, { actions: [{ type: 'open_app', package: app.package }] })
-  return `Installed ${app.package} ${app.version_name ?? ''}`.trim() + '.'
+// One call per preview: the end user's phone (theirs again, started if parked, or a new one at 30 Hz), the APK installed
+// or the Expo link opened in the matching Expo Go, on screen, and an embed link locked to your page. A build that doesn't
+// install or open fails with install_failed or open_failed and the phone id; the phone stays for the next try.
+function preview(endUser, source, origin) {
+  const expo = /^exps?:\/\/|^https:\/\/(\w+\.)?expo\.dev\//.test(source)
+  return mb('POST', '/previews', { [expo ? 'expo_url' : 'apk_url']: source, end_user: endUser, origin, interactive: true, ttl: 900 })
 }
 
 // --- Webhooks: verify, keep the latest 200 events for the page to poll -----------------------------------------------
@@ -109,10 +90,8 @@ const server = createServer(async (req, res) => {
       if (!END_USER.test(endUser ?? '') || !/^(https?|exps?):\/\/\S+$/.test(source ?? '')) return json(res, 400, { error: 'An end user id (letters, digits, . _ - @ : +) and an APK or Expo URL.' })
       // The page that will hold the iframe: this server's own origin (locked by Mobilebox with frame-ancestors).
       const origin = req.headers.origin === `http://localhost:${PORT}` ? req.headers.origin : ORIGIN
-      const phone = await phoneFor(endUser)
-      const loaded = await load(phone, source)
-      const embed = await mb('POST', `/phones/${phone.id}/embed`, { origin, interactive: true, ttl: 900 })
-      return json(res, 200, { phone: phone.id, display_hz: phone.display_hz, notice: phone.notice ?? null, loaded, url: embed.url, expires_at: embed.expires_at })
+      const p = await preview(endUser, source, origin)
+      return json(res, 200, { phone: p.phone_id, reused: p.reused, notice: p.notice ?? null, loaded: `${p.package} is on screen.`, url: p.embed_url, expires_at: p.expires_at })
     }
     if (req.method === 'POST' && url.pathname === '/api/park') {
       const { endUser } = JSON.parse(await read(req))
