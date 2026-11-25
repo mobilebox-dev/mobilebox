@@ -93,3 +93,16 @@ deleted: ph_on7c4dcbzlnk
 
 17 s from the first step to the report, 15 s of phone time; the phone was deleted. The API key was absent from every log and file afterwards (OpenHands masks secrets and the example keeps the shell history off disk).
 
+## App-builder preview
+
+**2026-11-25**, Node 24 on Linux, `examples/app-builder-preview` against production through a Cloudflare quick tunnel, driven in Chrome. Details and the recording: [app-builder-preview/README.md](app-builder-preview/README.md#recorded-run).
+
+| Step | Result | Time |
+|---|---|---|
+| Preview `user_42`, F-Droid Editor 1.98 APK, new phone | installed, live in the page at 30 Hz | 29 s |
+| Preview `user_42` again, parked phone | started, `phone.ready` webhook, live | 15 s |
+| Preview `user_7`, Expo SDK 58 tunnel link, new phone | Expo Go 58.0.6 installed itself, app live, Fast Refresh in the embed | 30 s |
+| Park | `phone.parked` webhooks (signature checked), usage per end user updated | 2 s |
+
+Afterwards both phones were deleted, the webhook removed and the page's origin taken off the list.
+
