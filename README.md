@@ -140,7 +140,7 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | Tool | What it does | Arguments (`?` = optional) |
 |---|---|---|
 | `list_phones` | List this project's phones. | – |
-| `create_phone` | Create a phone and wait until it is ready. | `platform?`, `device?`, `model?`, `android?`, `name?`, `idle_timeout?`, `max_duration?`, `country?`, `city?`, `network?`, `idempotency_key?`, `google?`, `size?`, `task?`, `auto_start?` |
+| `create_phone` | Create a phone and wait until it is ready. | `platform?`, `device?`, `model?`, `display_hz?`, `android?`, `name?`, `idle_timeout?`, `max_duration?`, `country?`, `city?`, `network?`, `idempotency_key?`, `google?`, `size?`, `task?`, `auto_start?` |
 | `start_phone` | Resume a parked phone and wait until it is ready; its apps, data and logins are kept. | `phone_id` |
 | `park_phone` | Park a phone: shuts it down and stops billing. | `phone_id` |
 | `clone_phone` | Copy a parked phone into new phones: same apps, data and logins, each with its own device identity (new ANDROID_IDs). | `phone_id`, `count?`, `name?`, `start?` |
