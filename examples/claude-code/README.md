@@ -1,6 +1,6 @@
 # Claude Code: test the APK you just built
 
-Claude Code builds your app, puts it on a cloud phone, opens it, checks the first screen and deletes the phone. No local emulator.
+Claude Code builds your app, puts it on a cloud phone, opens it, checks the first screen and deletes the phone. No local emulator. The longer walkthrough, with the calls Claude makes: [how Claude Code tests your Android app](https://mobilebox.dev/blog/claude-code-android-app-testing); every MCP tool is on the [Android MCP server](https://mobilebox.dev/android-mcp-server) page.
 
 **1. Connect once** (from a shell where `MOBILESANDBOX_API_KEY` is set):
 

@@ -181,6 +181,16 @@ Each creates a phone, checks one outcome and deletes the phone, also when the ch
 | [packages/python/](packages/python) | `mobilebox` Python client and `langchain-mobilebox` LangChain tools | Python 3.10+ |
 | [integrations/](examples/integrations) | OpenAI Agents SDK, LangGraph, CrewAI, browser-use, Mastra, Vercel AI SDK, Claude Agent SDK | the framework and a model key |
 
+## Guides
+
+Answers to the questions people ask before they pick a phone for their agent, each with prices and measured numbers on mobilebox.dev:
+
+- **Which one?** [Cloud Android for AI agents, compared](https://mobilebox.dev/blog/cloud-android-for-ai-agents-compared) and the [cheapest cloud Android phone per minute](https://mobilebox.dev/blog/cheapest-cloud-android-phone-per-minute), with start times from the [benchmarks](https://mobilebox.dev/benchmarks). Already on Limrun? [Limrun alternatives](https://mobilebox.dev/blog/limrun-alternatives).
+- **Connect an agent:** the [hosted Android MCP server](https://mobilebox.dev/android-mcp-server) for Claude Code, Cursor, Codex or any MCP client, and the [iOS simulator MCP server](https://mobilebox.dev/ios-simulator-mcp). What a [mobile sandbox](https://mobilebox.dev/mobile-sandbox) is, in one page.
+- **Test your app:** [how AI agents test mobile apps](https://mobilebox.dev/blog/test-mobile-apps-with-ai-agents) (four routes, honestly compared; [auf Deutsch](https://mobilebox.dev/de/mobile-apps-mit-ki-agenten-testen)), [an AI agent for your mobile apps](https://mobilebox.dev/app-automation), and [iPhone and iPad simulators without a Mac](https://mobilebox.dev/ios).
+- **Show it to people:** [watch your agent live](https://mobilebox.dev/live-view), or [embed a live phone in your own web app](https://mobilebox.dev/app-preview) for your users ([embed guide](https://mobilebox.dev/docs/embed)).
+- **Costs:** [pricing](https://mobilebox.dev/pricing): $0.01 a minute on Android, $0.03 on iOS, billed per second.
+
 ## Pricing
 
 | Device | Price |
