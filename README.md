@@ -153,7 +153,7 @@ Phones, apps and the screen over MCP; REST adds binary APK upload, account balan
 | `push_file` | Put a file on the phone, e.g. a game file, mod, save or document an app imports through Android's file picker: from a public download URL (up to 2 GB) or inline content. | `phone_id`, `path`, `url?`, `content?`, `encoding?` |
 | `pull_file` | Read a file from the phone's shared storage (/sdcard), e.g. a log, export or save an app wrote: text comes back as text and anything else as base64, up to 100 KB; PNG and JPEG as an image, up to 1 MB (larger files: GET /v1/phones/{id}/files over REST). | `phone_id`, `path?` |
 | `observe` | Read the current screen as a numbered element list. | `phone_id` |
-| `act` | Run 1–20 actions on the phone in order (tap, type, swipe, scroll, keys, open or close apps, waits) and stop at the first failure. | `phone_id`, `actions` |
+| `act` | Run 1–20 actions on the phone in order (tap, type, swipe, scroll, keys, open or close apps, open links, waits) and stop at the first failure. | `phone_id`, `actions` |
 | `screenshot` | Take a screenshot of the phone. | `phone_id` |
 | `watch_phone` | Get a link to watch the phone live, for the user: its screen with each of your actions drawn on it (cursor, taps, swipes, typed text) and a caption per step. | `phone_id` |
 | `embed_phone` | Get an iframe URL that shows this running Android phone live inside your own web app, for its end users (an app preview): signed, short-lived, framed only by the origin you name, which must be on the workspace's allowed list (PUT /v1/embed/origins). | `phone_id`, `origin`, `interactive?`, `ttl_seconds?` |
