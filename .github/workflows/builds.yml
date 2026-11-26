@@ -1,0 +1,32 @@
+# #482 research (Musti7even/phonebox): how long and how heavy one real Expo Android build is, on x86-64 and arm64.
+name: builds-research
+on:
+  push: { branches: [research/builds] }
+  workflow_dispatch: {}
+permissions: { contents: read }
+jobs:
+  build:
+    strategy: { fail-fast: false, matrix: { os: [ubuntu-24.04, ubuntu-24.04-arm] } }
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 75
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - uses: actions/setup-java@v4
+        with: { distribution: temurin, java-version: 17 }
+      - name: Android SDK (command-line tools only; Gradle fetches the rest)
+        run: |
+          sudo apt-get install -y -qq bc time >/dev/null
+          export ANDROID_HOME=$HOME/android-sdk; mkdir -p $ANDROID_HOME/cmdline-tools
+          curl -fsSL https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip -o /tmp/clt.zip
+          unzip -q /tmp/clt.zip -d $ANDROID_HOME/cmdline-tools && mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
+          yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+      - name: Measure
+        run: bash benchmarks/builds/measure.sh
+      - run: cat results/host.txt results/summary.txt
+        if: always()
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: { name: results-${{ matrix.os }}, path: results/ }
