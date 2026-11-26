@@ -6,7 +6,8 @@ on:
 permissions: { contents: read }
 jobs:
   build:
-    strategy: { fail-fast: false, matrix: { os: [ubuntu-24.04, ubuntu-24.04-arm] } }
+    # arm64 measured 26 Nov: aapt2 and CMake are x86-64 only (run 45791880846)
+    strategy: { fail-fast: false, matrix: { os: [ubuntu-24.04] } }
     runs-on: ${{ matrix.os }}
     timeout-minutes: 75
     steps:
@@ -22,7 +23,7 @@ jobs:
           curl -fsSL https://dl.google.com/android/repository/commandlinetools-linux-13114758_latest.zip -o /tmp/clt.zip
           unzip -q /tmp/clt.zip -d $ANDROID_HOME/cmdline-tools && mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
-          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV
+          echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV; echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
       - name: Measure
         run: bash benchmarks/builds/measure.sh
       - run: cat results/host.txt results/summary.txt

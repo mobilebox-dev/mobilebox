@@ -9,7 +9,7 @@ step() { # name, then the command
   local name=$1; shift; local base=$(free -m | awk '/Mem:/{print $3}') t0=$(date +%s)
   /usr/bin/time -f '%U %S %M' -o "$out/$name.time" "$@" > "$out/$name.log" 2>&1 & local pid=$!
   local p=$(peak $pid); wait $pid; local rc=$?
-  read -r u s rss < "$out/$name.time" 2>/dev/null || { u=0; s=0; rss=0; }
+  read -r u s rss < <(tail -1 "$out/$name.time" 2>/dev/null) || { u=0; s=0; rss=0; }
   printf '%s rc=%s wall_s=%s cpu_s=%.0f host_used_peak_mb=%s (base %s) max_rss_mb=%s\n' "$name" "$rc" "$(( $(date +%s) - t0 ))" "$(echo "$u + $s" | bc)" "$p" "$base" "$(( rss / 1024 ))" | tee -a "$out/summary.txt"
   return $rc
 }
