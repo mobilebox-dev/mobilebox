@@ -2,7 +2,8 @@
 # GitHub Actions and attached to the release `example-apks`: a release APK (arm64-v8a, what Mobilebox phones run) and an
 # Expo dev-client debug APK that loads its JavaScript from Metro.
 name: example-apks
-on: { workflow_dispatch: {} }
+on:
+  push: { branches: [research/builds], paths: [.github/workflows/example-apks.yml] }
 permissions: { contents: write }
 jobs:
   build:

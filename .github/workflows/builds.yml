@@ -1,7 +1,7 @@
 # #482 research (Musti7even/phonebox): how long and how heavy one real Expo Android build is, on x86-64 and arm64.
 name: builds-research
 on:
-  push: { branches: [research/builds] }
+  push: { branches: [research/builds], paths: [benchmarks/builds/**, .github/workflows/builds.yml] }
   workflow_dispatch: {}
 permissions: { contents: read }
 jobs:
