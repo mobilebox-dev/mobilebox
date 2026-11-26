@@ -29,4 +29,6 @@ jobs:
         if: always()
       - uses: actions/upload-artifact@v4
         if: always()
-        with: { name: results-${{ matrix.os }}, path: results/ }
+        with:
+          name: results-${{ matrix.os }}
+          path: results/
