@@ -18,11 +18,11 @@ step create npx --yes create-expo-app@latest app --template blank || { tail -30 
 cd app; grep '"expo"' package.json | tee -a "$out/summary.txt"
 step prebuild npx expo prebuild -p android --no-install || tail -30 "$out/prebuild.log"
 cd android
-step cold ./gradlew assembleRelease --no-daemon || tail -40 "$out/cold.log"
+step cold ./gradlew assembleRelease --no-daemon ${GRADLE_ARGS:-} || tail -40 "$out/cold.log"
 ./gradlew clean --no-daemon > /dev/null 2>&1
-step warm ./gradlew assembleRelease --no-daemon || tail -20 "$out/warm.log"
+step warm ./gradlew assembleRelease --no-daemon ${GRADLE_ARGS:-} || tail -20 "$out/warm.log"
 sed -i 's/Open up App.js to start working on your app!/Edited for the incremental build/' ../App.js
-step incremental ./gradlew assembleRelease --no-daemon || tail -20 "$out/incremental.log"
+step incremental ./gradlew assembleRelease --no-daemon ${GRADLE_ARGS:-} || tail -20 "$out/incremental.log"
 ls -la app/build/outputs/apk/release/ 2>/dev/null | tee -a "$out/summary.txt"
 du -sh ~/.gradle ~/.npm ../node_modules 2>/dev/null | tee -a "$out/summary.txt"
 grep -h -i "ndk\|cmake\|aapt2" "$out/cold.log" | sort | uniq -c | sort -rn | head -8 | tee -a "$out/summary.txt"

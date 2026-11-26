@@ -24,8 +24,8 @@ jobs:
           unzip -q /tmp/clt.zip -d $ANDROID_HOME/cmdline-tools && mv $ANDROID_HOME/cmdline-tools/cmdline-tools $ANDROID_HOME/cmdline-tools/latest
           yes | $ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager --licenses > /dev/null
           echo "ANDROID_HOME=$ANDROID_HOME" >> $GITHUB_ENV; echo "ANDROID_SDK_ROOT=$ANDROID_HOME" >> $GITHUB_ENV
-      - name: Measure
-        run: bash benchmarks/builds/measure.sh
+      - name: "Measure (arm64-v8a only, as our phones run)"
+        run: GRADLE_ARGS=-PreactNativeArchitectures=arm64-v8a bash benchmarks/builds/measure.sh
       - run: cat results/host.txt results/summary.txt
         if: always()
       - uses: actions/upload-artifact@v4
