@@ -3,7 +3,7 @@
   "name": "dev.mobilebox/mobilebox",
   "description": "A mobile sandbox for every agent: cloud Android phones and iOS simulators over MCP, from $0.01/min.",
   "title": "Mobilebox: Cloud phones for your agents",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "websiteUrl": "https://mobilebox.dev",
   "icons": [
     {
